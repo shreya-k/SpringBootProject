@@ -16,18 +16,26 @@ public class emp_controller {
 	 @Autowired
 	    emp_repository emp_rep;
 
-	    // Get All Notes
+	    // fetch all employees
 	 @GetMapping("/employees")
 	 public List<emp_data> getAllEmp_datas() {
 	     return emp_rep.findAll();
 	 }
-	    // Create a new Note
+	    // insert new employee
 	 @PostMapping("/employees")
 
 	 public emp_data createEmp_data(@Valid @RequestBody emp_data empd) {
 		    return emp_rep.save(empd);
+		    
+		   
 		}
-	    // Get a Single Note
+	 
+	 /*@PostMapping("/employees/search")
+	    public List<EmpDetails> search(@PathVariable(value = "deptId") String did){
+	        return emp_rep.findBydeptid(did);
+	    }*/
+
+	    // Get a Single row
 	 
 	 @GetMapping("/employees/{emp_id}")
 	 public emp_data getEmpById(@PathVariable(value = "emp_id") long empId) {
@@ -35,7 +43,7 @@ public class emp_controller {
 	             .orElseThrow(() -> new ResourceNotFoundException("emp_data", "emp_id", empId));
 	 }
 
-	    // Update a Note
+	    // Update a row
 	 
 	 @PutMapping("/employees/{emp_id}")
 	 public emp_data updateEmp_data(@PathVariable(value = "emp_id") long empId,
@@ -45,6 +53,8 @@ public class emp_controller {
 	             .orElseThrow(() -> new ResourceNotFoundException("emp_data", "emp_id",empId));
 
 	     empp.setFirstname(empDetails.getFirstname());
+	     empp.setDateofbirth(empDetails.getDateofbirth());
+	     empp.setDept_id(empDetails.getDept_id());
 
 	     emp_data updatedEmp = emp_rep.save(empp);
 	     return updatedEmp;
